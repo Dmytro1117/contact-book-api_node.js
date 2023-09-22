@@ -174,22 +174,19 @@ node index.js --action="remove" --id qdggE76Jtbfd9eWJHrssH
 відповідні посилання додай в файл README.md (створи цей файл в корені проєкту). Після прикріпи в LMS
 посилання на репозиторій для перевірки ментором виконаної роботи.
 
-`Отримуємо і виводимо весь список контактів у вигляді таблиці (console.table)`
+`Отримуємо і виводимо весь список контактів у вигляді таблиці (console.table) node index.js --action="list"`
 
-node index.js --action="list"
 https://ibb.co/HY8hzsY
 
-` Отримуємо контакт по id`
+` Отримуємо контакт по id node index.js --action="get" --id=5`
 
-node index.js --action="get" --id=5
 https://ibb.co/gS4gZbP
 
-`Додаємо контакт`
+`Додаємо контакт node index.js --action="add" --name="Mango" --email="mango@gmail.com" --phone="322-22-22"
+`
 
-node index.js --action="add" --name="Mango" --email="mango@gmail.com" --phone="322-22-22"
 https://ibb.co/sw8bt5X
 
-`Видаляємо контакт`
+`Видаляємо контакт node index.js --action="remove" --id=3`
 
-node index.js --action="remove" --id=3
 https://ibb.co/wgqGYtS
