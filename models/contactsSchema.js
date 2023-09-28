@@ -1,11 +1,14 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const { handleMongooseError } = require("../helpers/handleMongooseError");
 
-const contactSchema = Schema(
+const dateRegexp = /^\(\d{3}\) \d{3}-\d{4}$/;
+
+const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Set name for contact"],
+      required: true,
     },
     email: {
       type: String,
@@ -13,6 +16,8 @@ const contactSchema = Schema(
     },
     phone: {
       type: String,
+      // (163) 103-2445
+      match: dateRegexp,
       required: true,
     },
     favorite: {
@@ -22,6 +27,8 @@ const contactSchema = Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+contactSchema.post("save", handleMongooseError);
 
 const joiSchema = Joi.object({
   name: Joi.string().required(),
@@ -41,66 +48,3 @@ module.exports = {
   joiSchema,
   favoriteJoiSchema,
 };
-
-// const fs = require("fs/promises");
-// const path = require("path");
-// const { nanoid } = require("nanoid");
-
-// const contactsPath = path.join(__dirname, "./contacts.json");
-
-// const updateContacts = async (contacts) =>
-//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-// const listContacts = async ()=> {
-//     const data = await fs.readFile(contactsPath);
-//     return JSON.parse(data);
-// }
-
-// const getContactById = async(contactId) => {
-//     const contacts = await listContacts();
-//     const result = contacts.find(item => item.id === contactId);
-//     return result || null;
-// }
-
-// const addContact = async({name, email, phone }) => {
-//     const contacts = await listContacts();
-//     const newContact = {
-//         id: nanoid(),
-//         name,
-//         email,
-//         phone,
-//     };
-//     contacts.push(newContact);
-//     await updateContacts(contacts);
-//     return newContact;
-// }
-
-// const updateById = async(id, {name, email, phone})=> {
-//     const contacts = await listContacts();
-//     const index = contacts.findIndex(item => item.id === id);
-//     if(index === -1){
-//         return null;
-//     }
-//     contacts[index] = {id, name, email, phone};
-//     await updateContacts(contacts);
-//     return contacts[index];
-// }
-
-// const removeContact = async(contactId)=> {
-//     const contacts = await listContacts();
-//     const index = contacts.findIndex(item => item.id === contactId);
-//     if(index === -1){
-//         return null;
-//     }
-//     const [result] = contacts.splice(index, 1);
-//     await updateContacts(contacts);
-//     return result;
-// }
-
-// module.exports = {
-//     listContacts,
-//     getContactById,
-//     addContact,
-//     updateById,
-//     removeContact,
-// }

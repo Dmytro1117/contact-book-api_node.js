@@ -3,7 +3,7 @@ const { NotFound } = require("http-errors");
 const { ctrlWrapperContacts } = require("../helpers/ctrlWrapperContacts");
 
 const allContacts = async (req, res) => {
-  const contacts = await Contact.find({});
+  const contacts = await Contact.find({}, "-createdAt -updatedAt");
   res.json({
     status: "succes",
     code: 200,
