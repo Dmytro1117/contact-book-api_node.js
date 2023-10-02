@@ -4,12 +4,10 @@ const Conflict = require("http-errors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-const path = require("path");
-const fs = require("fs/promises");
-const Jimp = require("jimp");
+const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
 
 const { SECRET_KEY } = process.env;
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -117,24 +115,39 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const filename = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, filename);
-  await fs.rename(tempUpload, resultUpload);
+  const filePath = req.file.path;
 
-  Jimp.read(resultUpload, (err, image) => {
-    if (err) throw err;
-    image.resize(250, 250).write(resultUpload);
-  });
+  cloudinary.uploader.upload(
+    filePath,
+    {
+      folder: "avatars",
+      transformation: [{ width: 200, height: 200 }],
+      allowedFormats: ["jpg", "jpeg", "png", "gif"],
+    },
+    async (error, result) => {
+      if (error) {
+        console.error("Помилка завантаження на Cloudinary:", error);
+        res.status(500).json({
+          status: "error",
+          code: 500,
+          message: "Помилка завантаження на Cloudinary",
+        });
+      } else {
+        console.log("Завантажено на Cloudinary:", result.url);
 
-  const avatarURL = path.join("avatars", filename);
-  await User.findByIdAndUpdate(_id, { avatarURL });
+        const avatarURL = result.url;
+        await User.findByIdAndUpdate(_id, { avatarURL });
 
-  res.json({
-    status: "succes",
-    code: 200,
-    data: { avatarURL },
-  });
+        fs.unlinkSync(filePath);
+
+        res.json({
+          status: "success",
+          code: 200,
+          data: { avatarURL },
+        });
+      }
+    }
+  );
 };
 
 module.exports = {
