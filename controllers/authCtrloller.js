@@ -54,7 +54,7 @@ const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
   const user = await User.findOne({ verificationToken });
   if (!user) {
-    throw Conflict(401, "Email not found");
+    throw Conflict(404, "Email not found");
   }
   await User.findByIdAndUpdate(user._id, {
     verify: true,
@@ -77,7 +77,7 @@ const resendVerifyEmail = async (req, res) => {
     throw Conflict(401, "Email not found");
   }
   if (user.verify) {
-    throw Conflict(401, "Email already verify");
+    throw Conflict(400, "Email already verify");
   }
 
   const verifyEmail = {

@@ -102,9 +102,9 @@ ResponseBody: {
 **@ POST /users/verify**
 
 - Отримує `body` в форматі `{email}`
-- Якщо в `body` немає обов'язкового поля `email`, повертає json з ключем `{"message":"Email not found"}` і статусом `401`.
+- Якщо в `body` немає обов'язкового поля `email`, повертає json з ключем `{"message":"Email not found"}` і статусом `404`.
 - Якщо з `body` все добре, виконуємо повторну відправку листа з `verificationToken` на вказаний `email`, але тільки якщо користувач не верифікований.
-- Якщо користувач вже пройшов верифікацію відправити json з ключем `{"message":"Email already verify"}` зі статусом `401`.
+- Якщо користувач вже пройшов верифікацію відправити json з ключем `{"message":"Email already verify"}` зі статусом `400`.
 
 **Resending a email request**
 
