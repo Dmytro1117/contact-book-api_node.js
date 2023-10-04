@@ -1,4 +1,4 @@
-# Node.js Task-6
+# Node.js Task-6 (SendGrid)
 
 ## Критерії прийому
 
@@ -13,7 +13,7 @@
 
 ## Крок 1
 
-Створи гілку `06-email` з гілки main.
+Створи гілку `06-sendgrid` з гілки main.
 
 Продовжуємо створення REST API для роботи з колекцією контактів. Додайте верифікацію email користувача після реєстрації за допомогою сервісу [SendGrid](https://sendgrid.com/).
 
@@ -143,11 +143,3 @@ ResponseBody: {
   message: "Email already verify"
 }
 ```
-
-> ПРИМІТКА
->
-> Як альтернативу SendGrid можна використовувати пакет [nodemailer](https://www.npmjs.com/package/nodemailer)
-
-### Додаткове завдання - необов'язкове
-
-Напишіть dockerfile для вашої програми
