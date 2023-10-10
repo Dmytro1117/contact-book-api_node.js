@@ -1,0 +1,749 @@
+openapi: 3.0.0
+info:
+  title: Swagger API Contacts
+  version: 1.0.0
+servers:
+  - url: https://test-back-lp20.onrender.com/api
+
+paths:
+  /auth/register:
+    post:
+      summary: Registration new user
+      tags:
+        - Auth
+      operationId: RegistrationNewUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Registration"
+
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Bob Jonson
+                  email:
+                    type: string
+                    example: gmetum@sci.net
+                  avatarURL:
+                    type: string
+                    example: www.gravatar.com/avatar/76ceae3375ff085a80d80e31e960da34
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Conflict"
+
+  /auth/verify:
+    post:
+      summary: Resend verification token
+      tags:
+        - Auth
+      operationId: ResendVerification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: gmetum@sci.net
+      responses:
+        "200":
+          description: succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Re-verify email send success
+
+        "401":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email not found
+
+        "400":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email already verify
+
+  /auth/verify/{verificationToken}:
+    get:
+      summary: Verification User's email
+      tags:
+        - Auth
+      operationId: VerificationEmail
+      parameters:
+        - name: verificationToken
+          in: path
+          required: true
+          description: verification token
+          schema:
+            type: string
+          example: qJRyTbHAdKVlldd4LTh6t
+      responses:
+        "200":
+          description: succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email verify success
+
+        "401":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email not found
+
+  /auth/login:
+    post:
+      summary: Login User
+      tags:
+        - Auth
+      operationId: LoginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: gmetum@sci.net
+                password:
+                  type: string
+                  minLength: 10
+                  example: 1234567890
+      responses:
+        "200":
+          description: succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MWRiNzkwZTJyNjYzYjYxNThiZjdhNyIsImlhdCI6MTY5Njk1MjY5MSwiZXhwIjoxNjj2OTcwNjkxfQ.W7LsndQygCykOh_noKNhcQCMQiXds6HP3pYzIur3k6A
+
+        "403":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Sorry, user with email or password is wrong
+
+        "401":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email not verified
+
+  /auth/current:
+    get:
+      summary: get user's info
+      tags:
+        - Auth
+      operationId: getUserInfo
+
+      responses:
+        "200":
+          description: succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Bob Jonson
+                  email:
+                    type: string
+                    example: gmetum@sci.net
+
+      security:
+        - bearerAuth: []
+
+  /auth/logout:
+    post:
+      summary: Logout a user
+      tags:
+        - Auth
+      operationId: logoutUser
+
+      responses:
+        "204":
+          description: succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout success
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not authorized
+
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: invalid signature
+
+      security:
+        - bearerAuth: []
+
+  /auth/subscription:
+    patch:
+      summary: Patch subscription user
+      tags:
+        - Auth
+      operationId: patchSubscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscription:
+                  type: string
+                  enum:
+                    - starter
+                    - pro
+                    - business
+                  example: pro
+
+      responses:
+        "200":
+          description: succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Subscription change success
+
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not authorized
+
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: invalid signature
+
+      security:
+        - bearerAuth: []
+
+  # /auth/avatars:
+  #   patch:
+  #     summary: Uploads an image user
+  #     tags:
+  #       - Auth
+  #     operationId: uploadImage
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/octet-stream:
+  #           schema:
+  #             type: string
+  #             format: binary
+
+  #             properties:
+  #               avatar:
+  #                 type: string
+  #                 format: binary
+
+  #     responses:
+  #       "200":
+  #         description: succes
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 avatarURL:
+  #                   type: string
+  #                   example: www.gravatar.com/avatar/76ceae3375ff085a80d80e31e960da34
+
+  #       "500":
+  #         description: Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #                   example: Помилка завантаження на Cloudinary
+  /auth/avatars:
+    patch:
+      summary: Uploads an image user
+      tags:
+        - Auth
+      operationId: uploadImage
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatarURL:
+                    type: string
+                    example: www.gravatar.com/avatar/76ceae3375ff085a80d80e31e960da34
+        "500":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Помилка завантаження на Cloudinary
+
+      security:
+        - bearerAuth: []
+
+  /contacts:
+    get:
+      summary: Get all contacts
+      tags:
+        - Сontacts
+      operationId: getAllContacts
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contacts"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unauthorized"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+
+    post:
+      summary: Add new contact
+      tags:
+        - Сontacts
+      operationId: postNewContact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+
+  /contacts/{contact_Id}:
+    get:
+      summary: Get contact by Id
+      tags:
+        - Сontacts
+      operationId: getContactById
+      parameters:
+        - name: contact_Id
+          in: path
+          required: true
+          description: id contact
+          schema:
+            type: string
+          example: 651db689e2e663b6128bf7b3
+
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFound"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+      security:
+        - bearerAuth: []
+
+    put:
+      summary: Update contact by Id
+      tags:
+        - Сontacts
+      operationId: putContactById
+      parameters:
+        - name: contact_Id
+          in: path
+          required: true
+          description: id contact
+          schema:
+            type: string
+          example: 651db689e2e663b6128bf7b3
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Bob Jonson
+                email:
+                  type: string
+                  example: gutum@sci.net
+                phone:
+                  type: string
+                  example: (666) 555-6666
+                favorite:
+                  type: boolean
+                  example: false
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFound"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+      security:
+        - bearerAuth: []
+
+    delete:
+      summary: Delete contact by Id
+      tags:
+        - Сontacts
+      operationId: deleteContactById
+      parameters:
+        - name: contact_Id
+          in: path
+          required: true
+          description: id contact
+          schema:
+            type: string
+          example: 651db689e2e663b6128bf7b3
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: invalid token.
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Sorry, is not valid id.
+      security:
+        - bearerAuth: []
+
+  /contacts/{contact_Id}/favorite:
+    patch:
+      summary: Patch favorite by Id
+      tags:
+        - Сontacts
+      operationId: patchContactById
+      parameters:
+        - name: contact_Id
+          in: path
+          required: true
+          description: id contact
+          schema:
+            type: string
+          example: 651db689e2e663b6128bf7b3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                favorite:
+                  type: string
+                  example: true
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFound"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+      security:
+        - bearerAuth: []
+
+components:
+  schemas:
+    Registration:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: Bob Jonson
+        email:
+          type: string
+          example: gmetum@sci.net
+        password:
+          type: string
+          minLength: 10
+          example: 1234567890
+
+    Contact:
+      type: object
+      required:
+        - name
+        - email
+        - phone
+      properties:
+        _id:
+          type: string
+          example: 651db689e2e663b6128bf7b3
+        name:
+          type: string
+          example: Bob Jonson
+        email:
+          type: string
+          example: gmetum@sci.net
+        phone:
+          type: string
+          example: (666) 555-6666
+        favorite:
+          type: boolean
+          example: false
+
+    Contacts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Contact"
+
+    Unauthorized:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Not authorized
+
+    InternalServerError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: invalid token
+
+    NotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Sorry, contact not found
+
+    Conflict:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Sorry, user with email in use
+
+    BadRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Sorry, is not valid id.
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
