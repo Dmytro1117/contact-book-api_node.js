@@ -178,14 +178,17 @@ node index.js --action="remove" --id qdggE76Jtbfd9eWJHrssH
 
 https://ibb.co/HY8hzsY
 
-` Отримуємо контакт по id node index.js --action="get" --id=5`
+`Отримуємо контакт по id node index.js --action="get" --id=5`
 
 https://ibb.co/gS4gZbP
 
-`Додаємо контакт node index.js --action="add" --name="Mango" --email="mango@gmail.com" --phone="322-22-22"
-`
+`Додаємо контакт node index.js --action="add" --name="Mango" --email="mango@gmail.com" --phone="322-22-22"`
 
 https://ibb.co/sw8bt5X
+
+`Оновлюємо контакт node index.js --action="update" --id=oklAgaP3VR_i1SMexA_gL --name="Mango Repeta" --email="mango-repeta@gmail.com" --phone="411-22-22"`
+
+https://ibb.co/vdKDzBZ
 
 `Видаляємо контакт node index.js --action="remove" --id=3`
 

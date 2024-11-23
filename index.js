@@ -1,5 +1,4 @@
 const { program } = require("commander");
-
 const contacts = require("./db/contacts");
 
 const invokeAction = async ({ action, id, name, email, phone }) => {

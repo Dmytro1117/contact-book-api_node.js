@@ -1,26 +1,25 @@
 {
-  "name": "goit-nodejs-hw-1",
+  "name": "01-command-line_interface_applications",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index",
     "dev": "nodemon index"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dmytro1117/goit-nodejs-hw-1.git"
+    "url": "git+https://github.com/Dmytro1117/node.js-course/tree/01-CLI-%D0%B4%D0%BE%D0%B4%D0%B0%D1%82%D0%BE%D0%BA"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dmytro1117 (https://github.com/Dmytro1117)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Dmytro1117/goit-nodejs-hw-1/issues"
+    "url": "https://github.com/Dmytro1117/node.js-course/issues"
   },
-  "homepage": "https://github.com/Dmytro1117/goit-nodejs-hw-1#readme",
+  "homepage": "https://github.com/Dmytro1117/node.js-course/blob/01-CLI-%D0%B4%D0%BE%D0%B4%D0%B0%D1%82%D0%BE%D0%BA/README.md",
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.1.7"
   },
   "dependencies": {
     "commander": "^10.0.0",
