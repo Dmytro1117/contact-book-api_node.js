@@ -1,3 +1,4 @@
+const { NotFound } = require("http-errors");
 const {
   listContacts,
   getContactById,
@@ -5,10 +6,9 @@ const {
   updateById,
   removeContact,
 } = require("../models/requestDB");
-const { NotFound } = require("http-errors");
 const { ctrlWrapperContacts } = require("../helpers/ctrlWrapperContacts");
 
-const allContacts = async (req, res, next) => {
+const allContacts = async (req, res) => {
   const contacts = await listContacts();
   res.json({
     status: "succes",
@@ -19,11 +19,11 @@ const allContacts = async (req, res, next) => {
   });
 };
 
-const contactById = async (req, res, next) => {
+const contactById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
   if (!contact) {
-    throw new NotFound(`Sorry, contact with contactId ${contactId} not found`);
+    throw new NotFound(`Sorry, contact with id=${contactId} not found`);
   }
   res.json({
     status: "succes",
@@ -34,7 +34,7 @@ const contactById = async (req, res, next) => {
   });
 };
 
-const addOneContact = async (req, res, next) => {
+const addOneContact = async (req, res) => {
   const addedContact = await addContact(req.body);
   res.status(201).json({
     status: "succes",
@@ -43,11 +43,13 @@ const addOneContact = async (req, res, next) => {
   });
 };
 
-const updateContactById = async (req, res, next) => {
+const updateContactById = async (req, res) => {
   const { contactId } = req.params;
+
   const update = await updateById(contactId, req.body);
+
   if (!update) {
-    throw new NotFound(`Sorry, contact with contactId ${contactId} not found`);
+    throw new NotFound(`Sorry, contact with id=${contactId} not found`);
   }
   res.json({
     status: "succes",
@@ -56,11 +58,11 @@ const updateContactById = async (req, res, next) => {
   });
 };
 
-const deleteContactsById = async (req, res, next) => {
+const deleteContactsById = async (req, res) => {
   const { contactId } = req.params;
   const delet = await removeContact(contactId);
   if (!delet) {
-    throw new NotFound(`Sorry, contact with contactId ${contactId} not found`);
+    throw new NotFound(`Sorry, contact with id=${contactId} not found`);
   }
   res.json({
     status: "succes",

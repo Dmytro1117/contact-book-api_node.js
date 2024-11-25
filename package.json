@@ -1,6 +1,6 @@
 {
-  "name": "template",
-  "version": "0.0.0",
+  "name": "02-express",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
@@ -8,6 +8,17 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmytro1117/node.js-course/tree/02-express"
+  },
+  "keywords": [],
+  "author": "Dmytro1117 (https://github.com/Dmytro1117)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dmytro1117/node.js-course/issues"
+  },
+  "homepage": "https://github.com/Dmytro1117/node.js-course/blob/02-express/README.md",
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",

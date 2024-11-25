@@ -2,7 +2,7 @@
 
 ## Критерії прийому
 
-- Створено репозиторій з домашнім завданням — CLI додаток.
+- Створено репозиторій з домашнім завданням — Express.
 - Посилання на репозиторій надіслане ментору на перевірку.
 - Код відповідає технічному завданню проєкту.
 - При виконанні коду не виникає необроблених помилок.
@@ -26,6 +26,9 @@ npm i
 - [express](https://www.npmjs.com/package/express)
 - [morgan](https://www.npmjs.com/package/morgan)
 - [cors](https://www.npmjs.com/package/cors)
+- [http-errors](https://www.npmjs.com/package/http-errors)
+- [cross-env](https://www.npmjs.com/package/cross-env)
+- [nanoid](https://www.npmjs.com/package/nanoid)
 
 #### Крок 2
 
@@ -44,7 +47,7 @@ REST API повинен підтримувати такі раути.
 
 - Не отримує 'body';
 - отримує параметр 'id';
-- викликає функцію `getById` для роботи з json-файлом `contacts.json`;
+- викликає функцію `getContactById` для роботи з json-файлом `contacts.json`;
 - якщо такий `id` є, повертає об'єкт контакту в json-форматі зі статусом `200`;
 - якщо такого `id` немає, повертає json з ключем `"message": "Not found"` і статусом `404`.
 
@@ -69,9 +72,9 @@ REST API повинен підтримувати такі раути.
 **@ PUT /api/contacts/:id**
 
 - Отримує параметр `id`;
-- отримує `body` в json-форматі c оновленням будь-яких полів `name, email и phone`;
+- отримує `body` в json-форматі з оновленням будь-яких полів `name, email и phone`;
 - якщо `body` немає, повертає json з ключем `{"message": "missing fields"}` і статусом `400`;
-- якщо з `body` всі добре, викликає функцію `updateContact(contactId, body)`. (Напиши її) для
+- якщо з `body` всі добре, викликає функцію `updateById(contactId, body)`. (Напиши її) для
   поновлення контакту в файлі `contacts.json`;
 - за результатом роботи функції повертає оновлений об'єкт контакту і статусом `200`. В іншому
   випадку, повертає json з ключем `"message": "Not found"` і статусом `404`.
