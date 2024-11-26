@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "03-mongo-db",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,15 +8,26 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmytro1117/node.js-course/tree/03-mongo-db"
+  },
+  "keywords": [],
+  "author": "Dmytro1117 (https://github.com/Dmytro1117)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dmytro1117/node.js-course/issues"
+  },
+  "homepage": "https://github.com/Dmytro1117/node.js-course/blob/03-mongo-db/README.md",
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
+    "express": "4.21.1",
     "http-errors": "^2.0.0",
     "joi": "^17.7.0",
     "morgan": "1.10.0",
-    "mongoose": "^6.9.1",
-    "dotenv": "^16.0.3"
+    "mongoose": "^8.8.2",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -25,6 +36,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "3.1.7"
   }
 }
