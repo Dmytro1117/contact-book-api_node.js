@@ -3,10 +3,14 @@ const { NotFound } = require("http-errors");
 const { ctrlWrapperRoutes } = require("../helpers/ctrlWrapperRoutes");
 
 const allContacts = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { page = 1, limit = 20 } = req.query;
+  // const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite = null } = req.query;
+  const filter = {
+    owner: req.user._id,
+  };
   const skip = (page - 1) * limit;
-  const contacts = await Contact.find({ owner }, "-createdAt -updatedAt", {
+  if (favorite !== null) filter.favorite = favorite;
+  const contacts = await Contact.find(filter, "-createdAt -updatedAt", {
     skip,
     limit,
   }).populate("owner", "_id name email");
