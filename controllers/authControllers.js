@@ -1,19 +1,22 @@
-const { User } = require("../models/userModel");
-const { ctrlWrapperRoutes } = require("../helpers/ctrlWrapperRoutes");
 const Conflict = require("http-errors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const { controllerWrapper } = require("../decorators/controllerWrapper");
+
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
+
   const user = await User.findOne({ email });
+
   if (user) {
-    throw new Conflict(409, `Sorry, user with  ${email} in use`);
+    throw new Conflict(409, `Sorry, user with email ${email} in use`);
   }
 
-  const hashBacrypt = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  const result = await User.create({ name, email, password: hashBacrypt });
+  const hashPassword = await bcrypt.hash(password, 10);
+  const result = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
     status: "succes",
@@ -28,14 +31,14 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password = "" } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw new Conflict(401, `Sorry, user with ${email} or password is wrong`);
+    throw new Conflict(401, `Sorry, email or password is wrong`);
   }
-  const passwordCompare = bcrypt.compare(password, user.password);
-  if (!passwordCompare) {
-    throw new Conflict(401, `Sorry, user with ${email} or password is wrong`);
+  const passwordCompare = await bcrypt.compare(password, user.password);
+  if (!passwordCompare || password === "") {
+    throw new Conflict(401, `Sorry, email or password is wrong`);
   }
 
   const payload = {
@@ -55,7 +58,7 @@ const login = async (req, res) => {
 };
 
 const curent = async (req, res) => {
-  const { name, email } = req.user;
+  const { name, email, subscription } = req.user;
   res.json({
     status: "succes",
     code: 200,
@@ -63,6 +66,7 @@ const curent = async (req, res) => {
       user: {
         name,
         email,
+        subscription,
       },
     },
   });
@@ -70,7 +74,7 @@ const curent = async (req, res) => {
 
 const logout = async (req, res) => {
   const { _id, name } = req.user;
-  await User.findByIdAndUpdate(_id, { token: null });
+  await User.findByIdAndUpdate(_id, { token: "" });
 
   res.json({
     status: "succes",
@@ -80,16 +84,9 @@ const logout = async (req, res) => {
 };
 
 const updateSubscription = async (req, res) => {
-  const { _id } = req.user;
-
+  const { _id, name } = req.user;
   const { subscription } = req.body;
-  const update = await User.findByIdAndUpdate(
-    _id,
-    { subscription },
-    {
-      new: true,
-    }
-  );
+  const update = await User.findByIdAndUpdate(_id, { subscription });
   if (!update) {
     throw new Conflict(`Sorry, not found`);
   }
@@ -98,15 +95,15 @@ const updateSubscription = async (req, res) => {
     status: "success",
     code: 200,
     data: {
-      message: `Subscription change success on ${subscription}`,
+      message: `Subscription ${name} change on ${subscription} success`,
     },
   });
 };
 
 module.exports = {
-  register: ctrlWrapperRoutes(register),
-  login: ctrlWrapperRoutes(login),
-  curent: ctrlWrapperRoutes(curent),
-  logout: ctrlWrapperRoutes(logout),
-  updateSubscription: ctrlWrapperRoutes(updateSubscription),
+  register: controllerWrapper(register),
+  login: controllerWrapper(login),
+  curent: controllerWrapper(curent),
+  logout: controllerWrapper(logout),
+  updateSubscription: controllerWrapper(updateSubscription),
 };

@@ -2,7 +2,7 @@
 
 ## Критерії прийому
 
-- Створено репозиторій з домашнім завданням — CLI додаток.
+- Створено репозиторій з домашнім завданням — JWT.
 - Посилання на репозиторій надіслане ментору на перевірку.
 - Код відповідає технічному завданню проєкту.
 - При виконанні коду не виникає необроблених помилок.
@@ -13,7 +13,7 @@
 
 ## Крок 1
 
-Створи гілку `04-auth` з гілки master.
+Створи гілку `04-auth` з гілки main.
 
 Продовж створення REST API для роботи з колекцією контактів. Додай логіку аутентифікації / авторизації користувача через [JWT](https://jwt.io/).
 
@@ -23,9 +23,13 @@
 
 ```
 {
+  name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
   password: {
     type: String,
-    required: [true, 'Set password for user'],
+    required: [true, 'Password is required'],
   },
   email: {
     type: String,
@@ -56,7 +60,7 @@
 
 ### Регістрація
 
-Створити ендпоінт [`/users/register`](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#registration-request)
+Створити ендпоінт [`/auth/register`](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#registration-request)
 
 Зробити валідацію всіх обов'язкових полів (email і password). При помилці валідації повернути [Помилку валідації](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#registration-validation-error).
 
@@ -68,7 +72,7 @@
 ### Registration request
 
 ```
-POST /users/register
+POST /auth/register
 Content-Type: application/json
 RequestBody: {
   "email": "example@example.com",
@@ -109,7 +113,7 @@ ResponseBody: {
 
 ### Логін
 
-Створити ендпоінт [/users/login](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#login-request)
+Створити ендпоінт [/auth/login](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#login-request)
 
 В моделі `User` знайти користувача за `email`.
 
@@ -121,7 +125,7 @@ ResponseBody: {
 ### Login request
 
 ```
-POST /users/login
+POST /auth/login
 Content-Type: application/json
 RequestBody: {
   "email": "example@example.com",
@@ -186,7 +190,7 @@ ResponseBody: {
 
 ### Логаут
 
-Створити ендпоінт [`/users/logout`](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#logout-request).
+Створити ендпоінт [`/auth/logout`](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#logout-request).
 
 Додай в маршрут мідлвар перевірки токена.
 
@@ -197,7 +201,7 @@ ResponseBody: {
 ### Logout request
 
 ```
-POST /users/logout
+POST /auth/logout
 Authorization: "Bearer {{token}}"
 ```
 
@@ -221,7 +225,7 @@ Status: 204 No Content
 
 ### Поточний користувач - отримати дані юзера по токені
 
-Створити ендпоінт [`/users/current`](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#current-user-request).
+Створити ендпоінт [`/auth/current`](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#current-user-request).
 
 Додай в раут мідлвар перевірки токена.
 
@@ -231,7 +235,7 @@ Status: 204 No Content
 ### Current user request
 
 ```
-GET /users/current
+GET /auth/current
 Authorization: "Bearer {{token}}"
 ```
 
@@ -260,4 +264,4 @@ ResponseBody: {
 
 - Зробити пагінацію для колекції контактів (GET /contacts?page=1&limit=20).
 - Зробити фільтрацію контактів по полю обраного (GET /contacts?favorite=true)
-- Оновлення підписки (`subscription`) користувача через ендпоінт `PATCH /users`. Підписка повинна мати одне з наступних значень `['starter', 'pro', 'business']`
+- Оновлення підписки (`subscription`) користувача через ендпоінт `PATCH /auth`. Підписка повинна мати одне з наступних значень `['starter', 'pro', 'business']`
