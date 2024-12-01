@@ -1,5 +1,3 @@
-const { User } = require("../models/userModel");
-const { ctrlWrapperRoutes } = require("../helpers/ctrlWrapperRoutes");
 const Conflict = require("http-errors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -7,25 +5,27 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
+// const sharp = require("sharp");
+const User = require("../models/User");
+const { controllerWrapper } = require("../decorators/controllerWrapper");
 
 const { SECRET_KEY } = process.env;
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+
+const avatarsPath = path.resolve("public", "avatars");
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
+
   const user = await User.findOne({ email });
+
   if (user) {
-    throw new Conflict(409, `Sorry, user with  ${email} in use`);
+    throw new Conflict(409, `Sorry, user with email ${email} in use`);
   }
 
-  const hashBacrypt = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
-  const result = await User.create({
-    name,
-    email,
-    password: hashBacrypt,
-    avatarURL,
-  });
+
+  await User.create({ ...req.body, password: hashPassword, avatarURL });
 
   res.status(201).json({
     status: "succes",
@@ -40,14 +40,14 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password = "" } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw new Conflict(401, `Sorry, user with ${email} or password is wrong`);
+    throw new Conflict(401, `Sorry, email or password is wrong`);
   }
-  const passwordCompare = bcrypt.compare(password, user.password);
-  if (!passwordCompare) {
-    throw new Conflict(401, `Sorry, user with ${email} or password is wrong`);
+  const passwordCompare = await bcrypt.compare(password, user.password);
+  if (!passwordCompare || password === "") {
+    throw new Conflict(401, `Sorry, email or password is wrong`);
   }
 
   const payload = {
@@ -67,7 +67,7 @@ const login = async (req, res) => {
 };
 
 const curent = async (req, res) => {
-  const { name, email } = req.user;
+  const { name, email, subscription } = req.user;
   res.json({
     status: "succes",
     code: 200,
@@ -75,6 +75,7 @@ const curent = async (req, res) => {
       user: {
         name,
         email,
+        subscription,
       },
     },
   });
@@ -82,7 +83,7 @@ const curent = async (req, res) => {
 
 const logout = async (req, res) => {
   const { _id, name } = req.user;
-  await User.findByIdAndUpdate(_id, { token: null });
+  await User.findByIdAndUpdate(_id, { token: "" });
 
   res.json({
     status: "succes",
@@ -92,16 +93,9 @@ const logout = async (req, res) => {
 };
 
 const updateSubscription = async (req, res) => {
-  const { _id } = req.user;
-
+  const { _id, name } = req.user;
   const { subscription } = req.body;
-  const update = await User.findByIdAndUpdate(
-    _id,
-    { subscription },
-    {
-      new: true,
-    }
-  );
+  const update = await User.findByIdAndUpdate(_id, { subscription });
   if (!update) {
     throw new Conflict(`Sorry, not found`);
   }
@@ -110,22 +104,23 @@ const updateSubscription = async (req, res) => {
     status: "success",
     code: 200,
     data: {
-      message: `Subscription change success on ${subscription}`,
+      message: `Subscription ${name} change on ${subscription} success`,
     },
   });
 };
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const filename = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, filename);
-  await fs.rename(tempUpload, resultUpload);
+  const { path: oldPath, filename } = req.file;
+  // const newAvatarName = `${_id}_${originalname}`;
+  const newPath = path.join(avatarsPath, filename);
 
-  Jimp.read(resultUpload, (err, image) => {
-    if (err) throw err;
-    image.resize(250, 250).write(resultUpload);
-  });
+  await fs.rename(oldPath, newPath);
+  const image = await Jimp.read(newPath);
+  image.resize(250, 250).write(newPath);
+
+  // const newPath = path.join(avatarsPath, newAvatarName);
+  // await sharp(oldPath).resize(250, 250).toFile(newPath);
 
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
@@ -138,10 +133,10 @@ const updateAvatar = async (req, res) => {
 };
 
 module.exports = {
-  register: ctrlWrapperRoutes(register),
-  login: ctrlWrapperRoutes(login),
-  curent: ctrlWrapperRoutes(curent),
-  logout: ctrlWrapperRoutes(logout),
-  updateSubscription: ctrlWrapperRoutes(updateSubscription),
-  updateAvatar: ctrlWrapperRoutes(updateAvatar),
+  register: controllerWrapper(register),
+  login: controllerWrapper(login),
+  curent: controllerWrapper(curent),
+  logout: controllerWrapper(logout),
+  updateSubscription: controllerWrapper(updateSubscription),
+  updateAvatar: controllerWrapper(updateAvatar),
 };

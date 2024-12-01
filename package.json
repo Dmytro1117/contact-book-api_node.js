@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "05-multer",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,20 +8,31 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmytro1117/node.js-course/tree/05-avatars"
+  },
+  "keywords": [],
+  "author": "Dmytro1117 (https://github.com/Dmytro1117)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dmytro1117/node.js-course/issues"
+  },
+  "homepage": "https://github.com/Dmytro1117/node.js-course/blob/05-avatars/README.md",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "http-errors": "^2.0.0",
-    "joi": "^17.7.0",
-    "morgan": "1.10.0",
-    "mongoose": "^6.9.1",
-    "jsonwebtoken": "^9.0.0",
+    "dotenv": "^16.4.5",
+    "express": "4.21.1",
     "gravatar": "^1.8.2",
-    "multer": "^1.4.5-lts.1",
+    "http-errors": "^2.0.0",
     "jimp": "^0.22.4",
-    "dotenv": "^16.0.3"
+    "joi": "^17.7.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^8.8.2",
+    "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -30,6 +41,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "3.1.7"
   }
 }
