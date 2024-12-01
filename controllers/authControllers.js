@@ -5,7 +5,6 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
-// const sharp = require("sharp");
 const User = require("../models/User");
 const { controllerWrapper } = require("../decorators/controllerWrapper");
 
@@ -112,15 +111,11 @@ const updateSubscription = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: oldPath, filename } = req.file;
-  // const newAvatarName = `${_id}_${originalname}`;
   const newPath = path.join(avatarsPath, filename);
 
   await fs.rename(oldPath, newPath);
   const image = await Jimp.read(newPath);
   image.resize(250, 250).write(newPath);
-
-  // const newPath = path.join(avatarsPath, newAvatarName);
-  // await sharp(oldPath).resize(250, 250).toFile(newPath);
 
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
