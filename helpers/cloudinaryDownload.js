@@ -1,5 +1,13 @@
+const cloudinary = require("cloudinary").v2;
 const fs = require("fs/promises");
-const cloudinary = require("./cloudinaryConfig");
+
+const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = process.env;
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_KEY,
+  api_secret: CLOUDINARY_SECRET,
+});
 
 const cloudinaryDownload = async (file, folder, transformation) => {
   const filePath = file.path;
