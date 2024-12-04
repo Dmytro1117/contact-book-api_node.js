@@ -11,14 +11,13 @@ const {
   updateAvatar,
 } = require("../controllers/authControllers");
 const authenticate = require("../middlewares/authenticate");
-const multerDownload = require("../middlewares/multerDownload");
-
 const {
   registerJoiSchema,
   verifyJoiSchema,
   loginJoiSchema,
   subscriptionJoiSchema,
 } = require("../schemas/authJoiSchemas");
+const multerDownload = require("../middlewares/multerDownload");
 
 const authRouter = express.Router();
 
