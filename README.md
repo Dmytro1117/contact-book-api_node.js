@@ -64,7 +64,7 @@
 
 Зробити валідацію всіх обов'язкових полів (email і password). При помилці валідації повернути [Помилку валідації](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#registration-validation-error).
 
-У разі успішної валідації в моделі `User` створити користувача за даними, які пройшли валідацію. Для засолювання паролів використовуй [bcrypt](https://www.npmjs.com/package/bcrypt) або [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+У разі успішної валідації в моделі `User` створити користувача за даними, які пройшли валідацію. Для засолювання паролів використовуй [bcrypt](https://www.npmjs.com/package/bcrypt) або [bcryptjs](https://www.npmjs.com/package/bcryptjs).
 
 - Якщо пошта вже використовується кимось іншим, повернути [Помилку Conflict](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#registration-conflict-error).
 - В іншому випадку повернути [Успішна відповідь](https://textbook.edu.goit.global/lms-nodejs-homework/v1/uk/docs/hw-04/#registration-success-response).
