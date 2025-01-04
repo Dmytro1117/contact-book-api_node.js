@@ -1,5 +1,5 @@
 {
-  "name": "06-nodemailer",
+  "name": "06.1-docker",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dmytro1117/node.js-course/tree/06-nodemailer"
+    "url": "git+https://github.com/Dmytro1117/node.js-course/tree/06.1-docker"
   },
   "keywords": [],
   "author": "Dmytro1117 (https://github.com/Dmytro1117)",
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/Dmytro1117/node.js-course/issues"
   },
-  "homepage": "https://github.com/Dmytro1117/node.js-course/blob/06-nodemailer/README.md",
+  "homepage": "https://github.com/Dmytro1117/node.js-course/blob/06.1-docker/README.md",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cloudinary": "^2.5.1",
