@@ -29,7 +29,7 @@ const contactUpdateJoi = Joi.object()
 
 const contactFavoriteJoi = Joi.object({
   favorite: Joi.bool().required().messages({
-    "any.required": "сhange field",
+    "any.required": "enter favorite",
   }),
 });
 
