@@ -13,7 +13,7 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-const sendEmail = async (data) => {
+const sendVerifyEmail = async (data) => {
   try {
     const email = { ...data, from: "moiseenkodmitriy@i.ua" };
     await transport.sendMail(email);
@@ -26,5 +26,5 @@ const sendEmail = async (data) => {
 };
 
 module.exports = {
-  sendEmail,
+  sendVerifyEmail,
 };
