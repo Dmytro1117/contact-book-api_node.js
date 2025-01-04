@@ -218,7 +218,12 @@ ResponseBody: {
 ### Logout success response
 
 ```
-Status: 204 No Content
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+  "email": "example@example.com",
+  "subscription": "starter"
+}
 ```
 
 ## Крок 6
