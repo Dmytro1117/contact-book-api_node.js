@@ -1,4 +1,4 @@
-# Contacts (REST API)
+# Authorization and Сontact-book API
 
 ![Node.js](./assets/contacts.png)
 
