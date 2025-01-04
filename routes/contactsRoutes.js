@@ -5,7 +5,7 @@ const {
   addOneContact,
   updateContactById,
   updateFavorite,
-  deleteContactsById,
+  deleteContactById,
 } = require("../controllers/contactsControllers");
 const validateJoyWrapper = require("../decorators/validateJoyWrapper");
 const authenticate = require("../middlewares/authenticate");
@@ -47,6 +47,6 @@ contactsRouter.patch(
   updateFavorite
 );
 
-contactsRouter.delete("/:contactId", isValidId, deleteContactsById);
+contactsRouter.delete("/:contactId", isValidId, deleteContactById);
 
 module.exports = contactsRouter;

@@ -30,7 +30,7 @@ const authenticate = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    return next(Unauthorized(401, `Invalid sugnature (${error.message})`));
+    return next(Unauthorized(401, `Not authorized (${error.message})`));
   }
 };
 

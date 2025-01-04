@@ -15,29 +15,25 @@ const allContacts = async (req, res) => {
     limit,
   }).populate("owner", "_id name email");
   res.json({
-    status: "succes",
+    status: "Succes",
     code: 200,
-    data: {
-      contacts,
-    },
+    contacts,
   });
 };
 
 const contactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await Contact.findById(contactId).populate(
-    "owner",
-    "_id name email"
-  );
+  const contact = await Contact.findById(
+    contactId,
+    "-createdAt -updatedAt"
+  ).populate("owner", "_id name email");
   if (!contact) {
     throw new NotFound(`Sorry, contact with id=${contactId} not found`);
   }
   res.json({
-    status: "succes",
+    status: "Succes",
     code: 200,
-    data: {
-      contact,
-    },
+    contact,
   });
 };
 
@@ -53,20 +49,26 @@ const addOneContact = async (req, res) => {
   }
 
   const contact = await Contact.create({ ...req.body, cover, owner });
-  const addedContact = await Contact.findById(contact._id).populate(
-    "owner",
-    "_id name email"
-  );
+  const addedContact = await Contact.findById(
+    contact._id,
+    "-createdAt -updatedAt"
+  ).populate("owner", "_id name email");
 
   res.status(201).json({
-    status: "succes",
+    status: "Created",
     code: 201,
-    data: { addedContact },
+    addedContact,
   });
 };
 
 const updateContactById = async (req, res) => {
   const { contactId } = req.params;
+
+  const contact = await Contact.findById(contactId);
+
+  if (!contact) {
+    throw new NotFound(`Sorry, contact with id=${contactId} not found`);
+  }
 
   let { cover } = await Contact.findById(contactId);
 
@@ -76,17 +78,19 @@ const updateContactById = async (req, res) => {
     ]);
   }
 
-  const update = await Contact.findByIdAndUpdate(contactId, {
+  const updateContact = await Contact.findByIdAndUpdate(contactId, {
     ...req.body,
     cover,
-  }).populate("owner", "_id name email");
-  if (!update) {
+  })
+    .select("-createdAt -updatedAt")
+    .populate("owner", "_id name email");
+  if (!updateContact) {
     throw new NotFound(`Sorry, contact with id=${contactId} not found`);
   }
   res.json({
-    status: "succes",
+    status: "Success",
     code: 200,
-    data: { update },
+    updateContact,
   });
 };
 
@@ -100,26 +104,26 @@ const updateFavorite = async (req, res) => {
     throw new NotFound(`Sorry, contact with id=${contactId} not found`);
   }
   res.json({
-    status: "succes",
+    status: "Succes",
     code: 200,
-    data: { updatedFavorite },
+    updatedFavorite,
   });
 };
 
-const deleteContactsById = async (req, res, next) => {
+const deleteContactById = async (req, res) => {
   const { contactId } = req.params;
-  const deleted = await Contact.findByIdAndDelete(contactId).populate(
-    "owner",
-    "_id name email"
-  );
-  if (!deleted) {
+
+  const deletedContact = await Contact.findByIdAndDelete(contactId)
+    .select("-createdAt -updatedAt")
+    .populate("owner", "_id name email");
+  if (!deletedContact) {
     throw new NotFound(`Sorry, contact with id=${contactId} not found`);
   }
   res.json({
-    status: "succes",
+    status: "Succes",
     code: 200,
     message: "Delete success",
-    data: { deleted },
+    deletedContact,
   });
 };
 
@@ -129,5 +133,5 @@ module.exports = {
   addOneContact: controllerWrapper(addOneContact),
   updateContactById: controllerWrapper(updateContactById),
   updateFavorite: controllerWrapper(updateFavorite),
-  deleteContactsById: controllerWrapper(deleteContactsById),
+  deleteContactById: controllerWrapper(deleteContactById),
 };
